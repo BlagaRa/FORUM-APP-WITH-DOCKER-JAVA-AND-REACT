@@ -1,0 +1,33 @@
+services:
+  auth-service:
+    build: .
+    container_name: auth-service
+    environment:
+      spring.datasource.url: jdbc:postgresql://postgres-db:5432/ForumAuth
+      spring.datasource.username: postgres
+      spring.datasource.password: changeme
+      spring.jpa.hibernate.ddl-auto: update
+      spring.jpa.show-sql: true
+      spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+      amqp.url: amqps://opqzgyoy:QbrQbz_pnUwVMFvHS6m0GEvVNpqMZQRv@cow.rmq2.cloudamqp.com/opqzgyoy
+      amqp.password: QbrQbz_pnUwVMFvHS6m0GEvVNpqMZQRv
+    depends_on:
+      - postgres-db
+    ports:
+      - "8081:8080"
+
+  postgres-db:
+    image: postgres:15
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_DB: ForumAuth
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Keep the same styles as before -->
+</head>
+<body>
+    <div class="container">
+        <h2>Sign Up</h2>
+        <form id="signupForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <!-- Add phone number field if needed -->
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone">
+            </div>
+
+            <div class="form-group">
+                <label for="photo">Profile Photo:</label>
+                <input type="file" id="photo" name="photo" accept="image/*" required>
+            </div>
+
+            <button type="submit">Sign Up</button>
+            <div id="message" class="error"></div>
+        </form>
+    </div>
+
+    <div class="container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="loginEmail">Email:</label>
+                <input type="email" id="loginEmail" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" required>
+            </div>
+    
+            <button type="submit">Login</button>
+            <div id="loginMessage" class="error"></div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData();
+            const userData = {
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                name: document.getElementById('name').value,
+                // Add phone if needed
+                phoneNumber: document.getElementById('phone').value
+            };
+
+            // Add JSON data part
+            const dataBlob = new Blob([JSON.stringify(userData)], { type: 'application/json' });
+            formData.append('data', dataBlob);
+
+            // Add photo file
+            formData.append('photo', document.getElementById('photo').files[0]);
+
+            try {
+                const response = await fetch('http://localhost:8081/signup', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.text();
+                
+                if (response.ok) {
+                    showMessage('User signed-up successfully', 'green');
+                    document.getElementById('signupForm').reset();
+                } else {
+                    showMessage(result || 'Signup failed', 'red');
+                }
+            } catch (error) {
+                showMessage('An error occurred: ' + error.message, 'red');
+            }
+        });
+
+        function showMessage(message, color) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.style.color = color || 'red';
+        }
+    </script>
+    <script>
+        // Define message display function FIRST
+        function showLoginMessage(message, color) {
+            const messageDiv = document.getElementById('loginMessage');
+            if (messageDiv) {
+                messageDiv.textContent = message;
+                messageDiv.style.color = color || 'red';
+            }
+        }
+    
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+    
+            const loginData = {
+                email: document.getElementById('loginEmail').value,
+                password: document.getElementById('loginPassword').value
+            };
+    
+            try {
+                const response = await fetch('http://localhost:8081/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(loginData),
+                    credentials: 'include'
+                });
+    
+                const result = await response.text();
+                
+                if (response.ok) {
+                    showLoginMessage('Login successful!', 'green');
+                    localStorage.setItem('authToken', result);
+
+                    getCurrentUser();
+                    
+                    // Fetch posts after successful login
+                    const postsResponse = await fetch('http://localhost:8082/posts/filtered', {
+                        method: 'POST', // Should this be POST since it's consuming JSON?
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({}), // Empty object
+                        credentials: 'include'
+                    });
+    
+                    if (postsResponse.ok) {
+                        const postsData = await postsResponse.json();
+                        displayPosts(postsData);
+                    } else {
+                        showLoginMessage('Failed to fetch posts', 'red');
+                    }
+                    
+                } else {
+                    showLoginMessage(result || 'Login failed', 'red');
+                }
+            } catch (error) {
+                showLoginMessage('An error occurred: ' + error.message, 'red');
+            }
+        });
+    
+        function displayPosts(posts) {
+            const postsContainer = document.createElement('div');
+            postsContainer.id = 'posts-container';
+            document.body.appendChild(postsContainer);
+        
+            posts.forEach(tuple => {
+                let post = tuple.post;
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
+                postElement.innerHTML = `
+                    <h3>${post.title}</h3>
+                    <p>${post.text}</p>
+                    <div class="meta">
+                        <span>Author: ${post.author.name}</span>
+                        <span>Likes: ${post.likes}</span>
+                        <span>Dislikes: ${post.dislikes}</span>
+                        ${post.picture ? `<img src="${post.picture}" alt="Post image" style="max-width: 200px;">` : ''}
+                    </div>
+                `;
+                postsContainer.appendChild(postElement);
+            });
+        }
+        async function getCurrentUser() {
+            try {
+                const response = await fetch('http://localhost:8083/users/id', {
+                    method: 'GET',
+                    headers: {},
+                    credentials: 'include'
+                });
+        
+                if (response.ok) {
+                    const userData = await response.json();
+                    console.log('Current user:', userData);
+                    displayUserProfile(userData);
+                } else {
+                    console.error('Failed to fetch current user');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        
+        function displayUserProfile(user) {
+            const profileDiv = document.createElement('div');
+            profileDiv.innerHTML = `
+                <h2>Profile</h2>
+                <img src="${user.picture}" alt="Profile picture" style="width: 100px;">
+                <p>Name: ${user.name}</p>
+                <p>Email: ${user.email}</p>
+                <p>Phone: ${user.phoneNumber}</p>
+                <p>Score: ${user.score}</p>
+            `;
+            document.body.appendChild(profileDiv);
+        }
+    </script>
+</body>
+</html>

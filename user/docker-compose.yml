@@ -1,0 +1,33 @@
+services:
+  user-service:
+    build: .
+    container_name: user-service
+    environment:
+      spring.datasource.url: jdbc:postgresql://postgres-users-db:5432/ForumUsers
+      spring.datasource.username: postgres
+      spring.datasource.password: changeme
+      spring.jpa.hibernate.ddl-auto: update
+      spring.jpa.show-sql: true
+      spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+      amqp.url: amqps://opqzgyoy:QbrQbz_pnUwVMFvHS6m0GEvVNpqMZQRv@cow.rmq2.cloudamqp.com/opqzgyoy
+      amqp.password: QbrQbz_pnUwVMFvHS6m0GEvVNpqMZQRv
+    depends_on:
+      - postgres-users-db
+    ports:
+      - "8083:8080"
+
+  postgres-users-db:
+    image: postgres:15
+    container_name: postgres-users-db
+    restart: always
+    environment:
+      POSTGRES_DB: ForumUsers
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+    ports:
+      - "5435:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
