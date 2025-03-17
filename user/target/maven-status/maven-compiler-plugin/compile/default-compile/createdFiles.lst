@@ -1,0 +1,7 @@
+user\user\UserApplication.class
+user\user\repo\UserRepository.class
+user\user\entity\User.class
+user\user\controller\UserController.class
+user\user\service\EmailService.class
+user\user\entity\AuthDTO.class
+user\user\security\filters\CorsFilter.class
