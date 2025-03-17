@@ -11,3 +11,6 @@ foreach ($folder in $folders) {
         Write-Host "Folder '$folder' does not exist."
     }
 }
+do {
+    $input = Read-Host -Prompt "Press Enter to exit"
+} while ($input -ne "")
