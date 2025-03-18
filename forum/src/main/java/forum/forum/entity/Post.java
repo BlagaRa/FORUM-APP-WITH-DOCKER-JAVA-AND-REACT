@@ -39,6 +39,6 @@ public class Post {
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "answered_to_id")
     private Long answeredTo;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Tag> tags;
 }

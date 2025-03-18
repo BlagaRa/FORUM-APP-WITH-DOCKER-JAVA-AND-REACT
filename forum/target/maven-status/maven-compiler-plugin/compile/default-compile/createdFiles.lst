@@ -20,6 +20,7 @@ forum\forum\storage\AwsS3Config.class
 forum\forum\handlers\PostActionContainerHandler.class
 forum\forum\service\messageQueue\Consumer.class
 forum\forum\service\messageQueue\AbstractQueue.class
+forum\forum\controller\TagController.class
 forum\forum\ForumApplication.class
 forum\forum\entity\Action.class
 forum\forum\repository\PostRepository.class
