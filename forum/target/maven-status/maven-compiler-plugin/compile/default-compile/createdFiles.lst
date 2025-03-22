@@ -3,6 +3,7 @@ forum\forum\service\messageQueue\ISubscriberFunctionality.class
 forum\forum\service\messageQueue\Producer.class
 forum\forum\security\AuthFilter.class
 forum\forum\security\JWTUtil.class
+forum\forum\service\TagService.class
 forum\forum\entity\Post.class
 forum\forum\service\messageQueue\PublishScoreUtil.class
 forum\forum\controller\AbstractController.class
@@ -14,6 +15,7 @@ forum\forum\util\ScoreUtil.class
 forum\forum\entity\Tag.class
 forum\forum\entity\User.class
 forum\forum\repository\TagRepository.class
+forum\forum\service\AbstractService.class
 forum\forum\controller\PostController.class
 forum\forum\service\pgDialect\FtsPgDialect.class
 forum\forum\storage\AwsS3Config.class
@@ -22,6 +24,7 @@ forum\forum\service\messageQueue\Consumer.class
 forum\forum\service\messageQueue\AbstractQueue.class
 forum\forum\controller\TagController.class
 forum\forum\ForumApplication.class
+forum\forum\service\PostService.class
 forum\forum\entity\Action.class
 forum\forum\repository\PostRepository.class
 forum\forum\entity\PostActionDTO.class

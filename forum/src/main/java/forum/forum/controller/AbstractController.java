@@ -10,8 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractController<T, R extends JpaRepository<T, Long>>{
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
-    R repo;
+    private R repo;
 
     @PostMapping
     public ResponseEntity<T> add(@RequestBody T newEntry) {

@@ -32,12 +32,6 @@ public class Post {
     private Date dateTime;
     private Integer likes = 0;
     private Integer dislikes = 0;
-//    @OneToMany
-//    @JoinColumn(name = "answers_id")
-//    private ArrayList<Post> answers;
-//    @JsonIgnore
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "answered_to_id")
     private Long answeredTo;
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Tag> tags;
