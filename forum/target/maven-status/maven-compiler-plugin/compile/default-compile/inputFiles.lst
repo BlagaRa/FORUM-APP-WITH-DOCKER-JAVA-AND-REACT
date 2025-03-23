@@ -23,6 +23,7 @@ C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\security
 C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\security\JWTParser.java
 C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\security\JWTUtil.java
 C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\service\AbstractService.java
+C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\service\ActionService.java
 C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\service\messageQueue\AbstractQueue.java
 C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\service\messageQueue\Consumer.java
 C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\service\messageQueue\InsertUserSubscriberFunctionalityImpl.java
@@ -34,6 +35,7 @@ C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\service\
 C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\service\pgDialect\FtsPgDialect.java
 C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\service\PostService.java
 C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\service\TagService.java
+C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\service\UserService.java
 C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\storage\AwsS3Config.java
 C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\storage\AwsS3Service.java
 C:\UTCN\an3\sem2\ps\labs\assigment\proj\forum\src\main\java\forum\forum\util\IScoreAdjuster.java

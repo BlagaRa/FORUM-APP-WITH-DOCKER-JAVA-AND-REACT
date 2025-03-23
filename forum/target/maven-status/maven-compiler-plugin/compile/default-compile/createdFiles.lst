@@ -6,6 +6,7 @@ forum\forum\security\JWTUtil.class
 forum\forum\service\TagService.class
 forum\forum\entity\Post.class
 forum\forum\service\messageQueue\PublishScoreUtil.class
+forum\forum\service\ActionService.class
 forum\forum\controller\AbstractController.class
 forum\forum\util\PositiveScoreAdjusterValues.class
 forum\forum\controller\ActionController.class
@@ -34,6 +35,7 @@ forum\forum\controller\TestController.class
 forum\forum\storage\AwsS3Service.class
 forum\forum\security\JWTParser.class
 forum\forum\security\CorsFilter.class
+forum\forum\service\UserService.class
 forum\forum\handlers\ActionControllerHandler.class
 forum\forum\entity\ScoreAdjustmentDTO.class
 forum\forum\service\messageQueue\QueueService.class

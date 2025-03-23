@@ -33,6 +33,6 @@ public class Post {
     private Integer likes = 0;
     private Integer dislikes = 0;
     private Long answeredTo;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Tag> tags;
 }

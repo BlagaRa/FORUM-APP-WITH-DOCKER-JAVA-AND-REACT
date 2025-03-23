@@ -7,7 +7,7 @@ foreach ($folder in $folders) {
         Write-Host "Starting docker-compose in folder '$folder' on a separate process..."
         
         # Start docker-compose process and capture its details
-        $process = Start-Process -FilePath "docker-compose" -ArgumentList "up --build" -WorkingDirectory $folder -NoNewWindow -PassThru -Wait
+        $process = Start-Process -FilePath "docker-compose" -ArgumentList "up --build" -WorkingDirectory $folder -PassThru
         
         # Check if the process failed
         if ($process.ExitCode -ne 0) {

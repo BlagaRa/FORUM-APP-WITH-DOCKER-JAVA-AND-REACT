@@ -1,10 +1,12 @@
 package forum.forum.handlers;
 
 import forum.forum.entity.*;
-import forum.forum.repository.PostRepository;
+import forum.forum.service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,31 +15,26 @@ import java.util.Optional;
 
 @Service
 public class PostActionContainerHandler {
-    public List<PostActionDTO> filteredPosts(PostRepository postRepository, Long userId, FiltersDTO filters){
-        Boolean ignoreTags = false;
-        if(filters.getTags() == null) {
-            ignoreTags = true;
-            filters.setTags(new ArrayList<>());
-        }
-        return postRepository.findPostsPersonalized(
+    @Autowired
+    PostService postService;
+
+    public List<PostActionDTO> filteredPosts(Long userId, FiltersDTO filters){
+        return postService.findPostsPersonalized(
                 userId,
-                filters.getAnswerId(),
-                filters.getTags(),
-                ignoreTags,
-                filters.getTitleQuery()
+                filters
         );
     }
 
-    public Post addPost(PostRepository postRepo, AuthDTO authData, Post newEntry){
+    public Post addPost(AuthDTO authData, Post newEntry){
         newEntry.setDateTime(new Date());
         newEntry.setAuthor(new User(authData.getId(), null));
         newEntry.setStatus("opened");
-        postRepo.save(newEntry);
+        postService.save(newEntry);
         return newEntry;
     }
 
-    public Post updatePost(PostRepository postRepo, AuthDTO authData, Post newEntry){
-        Optional<Post> oldEntryOpt = postRepo.findById(newEntry.getId());
+    public Post updatePost(AuthDTO authData, Post newEntry){
+        Optional<Post> oldEntryOpt = postService.findById(newEntry.getId());
         if(oldEntryOpt.isEmpty()) return null;
         Post oldEntry = oldEntryOpt.get();
 
@@ -51,8 +48,10 @@ public class PostActionContainerHandler {
         if(newEntry.getText() != null){
             oldEntry.setText(newEntry.getText());
         }
-        postRepo.save(oldEntry);
+        postService.save(oldEntry);
 
         return oldEntry;
     }
+
+    public Optional<Post> get(Long id){ return postService.findById(id);}
 }
