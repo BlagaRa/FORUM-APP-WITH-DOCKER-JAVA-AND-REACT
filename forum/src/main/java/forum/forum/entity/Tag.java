@@ -1,5 +1,6 @@
 package forum.forum.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.Getter;
@@ -18,7 +19,9 @@ public class Tag {
     private Long id;
     @Column(nullable = false, unique = true)
     private String name;
-    @ManyToMany(mappedBy = "tags")
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     private List<Post> posts;
 
     public Tag() {}

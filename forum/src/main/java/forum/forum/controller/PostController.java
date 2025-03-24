@@ -1,8 +1,8 @@
 package forum.forum.controller;
 
 import forum.forum.entity.*;
-import forum.forum.repository.PostRepository;
 import forum.forum.handlers.PostActionContainerHandler;
+import forum.forum.service.PostService;
 import forum.forum.storage.AwsS3Service;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/posts")
-//@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.163.178:3000"}, allowCredentials = "true")
 public class PostController  {
-    @Autowired
-    PostRepository postRepo;
     @Autowired
     PostActionContainerHandler handler;
     @Autowired
@@ -28,7 +25,7 @@ public class PostController  {
     @PostMapping(value="filtered", consumes="application/json")
     public ResponseEntity<List<PostActionDTO>> pers(HttpServletRequest request, @RequestBody FiltersDTO filters) {
         return new ResponseEntity<>(
-                handler.filteredPosts(this.postRepo, ((AuthDTO)request.getAttribute("authData")).getId(),  filters),
+                handler.filteredPosts(((AuthDTO)request.getAttribute("authData")).getId(),  filters),
                 HttpStatus.OK
         );
     }
@@ -38,7 +35,7 @@ public class PostController  {
         String photoLink = s3Service.uploadFile(photo,  newEntry.getTitle());
         newEntry.setPicture(photoLink);
         return new ResponseEntity<>(
-                handler.addPost(postRepo, ((AuthDTO)request.getAttribute("authData")), newEntry),
+                handler.addPost(((AuthDTO)request.getAttribute("authData")), newEntry),
                 HttpStatus.OK
         );
     }
@@ -46,17 +43,17 @@ public class PostController  {
     @PostMapping()
     public ResponseEntity<Post> add(HttpServletRequest request, @RequestBody Post newEntry) {
         return new ResponseEntity<>(
-                handler.addPost(postRepo, ((AuthDTO)request.getAttribute("authData")), newEntry),
+                handler.addPost(((AuthDTO)request.getAttribute("authData")), newEntry),
                 HttpStatus.OK);
     }
 
     @PatchMapping()
     public ResponseEntity<Post> update(HttpServletRequest request, @RequestBody Post newEntry){
         return new ResponseEntity<>(
-                handler.updatePost(postRepo, ((AuthDTO)request.getAttribute("authData")), newEntry),
+                handler.updatePost(((AuthDTO)request.getAttribute("authData")), newEntry),
                 HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Optional<Post>> get(@PathVariable Long id){ return new ResponseEntity<>(postRepo.findById(id), HttpStatus.OK);}
+    public ResponseEntity<Optional<Post>> get(@PathVariable Long id){ return new ResponseEntity<>(handler.get(id), HttpStatus.OK);}
 }

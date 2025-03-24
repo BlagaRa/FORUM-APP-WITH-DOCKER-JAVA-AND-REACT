@@ -4,14 +4,12 @@ import forum.forum.entity.Action;
 import forum.forum.entity.Post;
 import forum.forum.entity.ScoreAdjustmentDTO;
 import forum.forum.entity.User;
-import forum.forum.repository.ActionRepository;
-import forum.forum.repository.PostRepository;
-import forum.forum.repository.UserRepository;
-import forum.forum.service.messageQueue.Producer;
+import forum.forum.service.ActionService;
+import forum.forum.service.PostService;
+import forum.forum.service.UserService;
 import forum.forum.service.messageQueue.PublishScoreUtil;
 import forum.forum.util.ScoreUtil;
 import jakarta.transaction.Transactional;
-import org.apache.catalina.util.ToStringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,18 +21,18 @@ import java.util.Optional;
 public class ActionControllerHandler {
 
     @Autowired
-    ActionRepository actionRepo;
+    ActionService actionService;
     @Autowired
-    PostRepository postRepo;
+    PostService postService;
     @Autowired
-    UserRepository userRepo;
+    UserService userService;
     @Autowired
     ScoreUtil scoreUtil;
     @Autowired
     PublishScoreUtil scorePublisher;
 
     public ResponseEntity<String> handelAdd(Action action){
-        Optional<Post> existingPostOpt = postRepo.findById(action.getPostId());
+        Optional<Post> existingPostOpt = postService.findById(action.getPostId());
         if(existingPostOpt.isEmpty()){
             return new ResponseEntity<>(
                     "No such post",
@@ -42,7 +40,7 @@ public class ActionControllerHandler {
             );
         }
         Post existingPost = existingPostOpt.get();
-        Optional<User> existingSenderOpt = userRepo.findById(action.getUserId());
+        Optional<User> existingSenderOpt = userService.findById(action.getUserId());
         if(existingSenderOpt.isEmpty()){
             return new ResponseEntity<>(
                     "No such sender",
@@ -74,9 +72,9 @@ public class ActionControllerHandler {
         );
 
         try{
-            actionRepo.save(action);
-            postRepo.save(existingPost);
-            userRepo.save(existingSender);
+            actionService.save(action);
+            postService.save(existingPost);
+            userService.save(existingSender);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return new ResponseEntity<>(
@@ -95,7 +93,7 @@ public class ActionControllerHandler {
 
     @Transactional
     public ResponseEntity<String> handleDelete(Action action){
-        actionRepo.deleteByPostIdAndUserId(action.getPostId(), action.getUserId());
+        actionService.deleteByPostIdAndUserId(action.getPostId(), action.getUserId());
         return new ResponseEntity<>(
                 "Action deleted successfully",
                 HttpStatus.OK
