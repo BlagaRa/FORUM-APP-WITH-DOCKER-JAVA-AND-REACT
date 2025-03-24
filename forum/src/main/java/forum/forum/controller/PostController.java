@@ -56,4 +56,11 @@ public class PostController  {
 
     @GetMapping("{id}")
     public ResponseEntity<Optional<Post>> get(@PathVariable Long id){ return new ResponseEntity<>(handler.get(id), HttpStatus.OK);}
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> delete(HttpServletRequest req, @PathVariable Long id){
+
+        handler.delete(((AuthDTO) req.getAttribute("authData")), id);
+        return new ResponseEntity<>("Deleted post successfuly", HttpStatus.OK);
+    }
 }

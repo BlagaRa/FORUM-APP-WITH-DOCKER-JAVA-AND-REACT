@@ -29,10 +29,10 @@ public class Post {
     private String picture;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date dateTime;
+    private Date dateTime = new Date();
     private Integer likes = 0;
     private Integer dislikes = 0;
     private Long answeredTo;
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.MERGE})
     private List<Tag> tags;
 }

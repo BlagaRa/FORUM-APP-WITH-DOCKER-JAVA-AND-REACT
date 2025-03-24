@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import user.user.entity.User;
 import user.user.repo.UserRepository;
+import user.user.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserRepositoryTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userRepository;
 
     // We'll store references to our test users so we can refer to them in later tests
     private User user1;
@@ -36,7 +37,7 @@ class UserRepositoryTest {
 
         // Check IDs are not null after saving
         assertNotNull(user1.getId(), "User1's ID should be generated");
-        assertNotNull(user2.getId(), "User2's ID should be generated");
+        assertNq2otNull(user2.getId(), "User2's ID should be generated");
     }
 
     @Test

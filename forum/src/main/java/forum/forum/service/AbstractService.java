@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractService<T, R extends JpaRepository<T, Long>>{
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     R repo;
 

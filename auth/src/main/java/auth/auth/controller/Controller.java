@@ -3,11 +3,11 @@ package auth.auth.controller;
 import auth.auth.entity.AuthDTO;
 import auth.auth.entity.FullUserDTO;
 import auth.auth.entity.User;
-import auth.auth.repo.UserRepository;
 import auth.auth.service.PasswordService.PasswordHasher;
 import auth.auth.service.JWTService.JWTGenerator;
 import auth.auth.service.JWTService.JWTParser;
 import auth.auth.service.PasswordService.PasswordMatcher;
+import auth.auth.service.UserService;
 import auth.auth.service.messageQueue.PublisherUtil;
 import auth.auth.storage.AwsS3Service;
 import jakarta.servlet.http.Cookie;
@@ -27,7 +27,7 @@ public class Controller {
     @Autowired
     private JWTGenerator jwtGenerator;
     @Autowired
-    private UserRepository userRepo;
+    private UserService userService;
     @Autowired
     private PasswordHasher passwordHasher;
     @Autowired
@@ -63,7 +63,7 @@ public class Controller {
             return new ResponseEntity<>("Access Denied: Not Admin", HttpStatus.UNAUTHORIZED);
         }
 
-        Optional<User> bannableUserOpt = userRepo.findById(userId);
+        Optional<User> bannableUserOpt = userService.findById(userId);
         User bannableUser = null;
         if(bannableUserOpt.isEmpty()){
             return new ResponseEntity<>("No such user", HttpStatus.NOT_FOUND);
@@ -74,7 +74,7 @@ public class Controller {
         FullUserDTO fullUser = new FullUserDTO();
         fullUser.setId(userId);
         pubUtil.publishFullUser(fullUser);
-        userRepo.save(bannableUser);
+        userService.save(bannableUser);
 
         /// also send through Q
 
@@ -92,7 +92,7 @@ public class Controller {
     @PostMapping("/login")
     public ResponseEntity<String> login(HttpServletResponse rsp, @RequestBody AuthDTO authData){
         User user;
-        Optional<User> optUser = userRepo.findByEmail(authData.getEmail());
+        Optional<User> optUser = userService.findByEmail(authData.getEmail());
 
         if(optUser.isEmpty()) {
             return new ResponseEntity<>("Nonexistent user" , HttpStatus.BAD_REQUEST);
@@ -136,7 +136,7 @@ public class Controller {
         }
 
         try {
-            userRepo.save(user);
+            userService.save(user);
         } catch(Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>("Email already in use" , HttpStatus.BAD_REQUEST);
