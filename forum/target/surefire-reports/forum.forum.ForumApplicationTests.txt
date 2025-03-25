@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: forum.forum.ForumApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.49 s -- in forum.forum.ForumApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.00 s -- in forum.forum.ForumApplicationTests
