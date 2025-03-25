@@ -37,7 +37,7 @@ class UserRepositoryTest {
 
         // Check IDs are not null after saving
         assertNotNull(user1.getId(), "User1's ID should be generated");
-        assertNq2otNull(user2.getId(), "User2's ID should be generated");
+        assertNotNull(user2.getId(), "User2's ID should be generated");
     }
 
     @Test

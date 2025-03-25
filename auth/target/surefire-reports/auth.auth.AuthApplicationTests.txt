@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: auth.auth.AuthApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.145 s -- in auth.auth.AuthApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.05 s -- in auth.auth.AuthApplicationTests
