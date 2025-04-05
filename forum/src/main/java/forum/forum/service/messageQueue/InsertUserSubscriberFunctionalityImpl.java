@@ -22,6 +22,8 @@ public class InsertUserSubscriberFunctionalityImpl implements ISubscriberFunctio
             return;
         }
         System.out.println(newUser);
-        userService.save(newUser);
+        try {
+            userService.save(newUser);
+        } catch (Exception ignored) {}
     }
 }
