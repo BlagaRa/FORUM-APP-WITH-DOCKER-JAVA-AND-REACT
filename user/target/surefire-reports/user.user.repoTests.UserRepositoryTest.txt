@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: user.user.repoTests.UserRepositoryTest
 -------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.16 s -- in user.user.repoTests.UserRepositoryTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.351 s -- in user.user.repoTests.UserRepositoryTest

@@ -53,6 +53,7 @@ public class Controller {
         User user = null;
         try {
             user = jwtParser.validateAndExtractClaims(token);
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return new ResponseEntity<>("Access Denied: Invalid Credentials", HttpStatus.FORBIDDEN);

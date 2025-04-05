@@ -83,6 +83,11 @@
 			<artifactId>commons-email</artifactId>
 			<version>1.5</version>
 		</dependency>
+		<dependency>
+			<groupId>com.twilio.sdk</groupId>
+			<artifactId>twilio</artifactId>
+			<version>10.7.0</version>
+		</dependency>
 
 	</dependencies>
 

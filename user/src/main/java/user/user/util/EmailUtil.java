@@ -11,10 +11,10 @@ public class EmailUtil {
         Email email = new SimpleEmail();
         email.setHostName("smtp.gmail.com");
         email.setSmtpPort(465);
-        email.setAuthenticator(new DefaultAuthenticator("koathbaht@gmail.com", "jruilktdupjokrdm"));
+        email.setAuthenticator(new DefaultAuthenticator("wow", "bau"));
         email.setSSLOnConnect(true);
         try {
-            email.setFrom("koathbaht@gmail.com");
+            email.setFrom("wow");
             email.setSubject(subject);
             email.setMsg(body);
             email.addTo(to);

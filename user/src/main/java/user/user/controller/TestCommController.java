@@ -8,16 +8,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import user.user.util.EmailUtil;
+import user.user.util.SmsUtil;
 
-@RestController
-@RequestMapping("email")
-public class TestEmailController {
-    @Autowired
+//@RestController
+//@RequestMapping("email")
+public class TestCommController {
+//    @Autowired
     EmailUtil emailUtil;
+//    @Autowired
+    SmsUtil smsUtil;
 
-    @GetMapping("send/{to}")
-    public ResponseEntity<String> send(@PathVariable String to){
-        emailUtil.sendEmail(to, "TestEmailController", "TestEmailController");
+    @GetMapping("email/{to}")
+    public ResponseEntity<String> sendEmail(@PathVariable String to){
+        emailUtil.sendEmail(to, "TestCommController", "TestCommController");
         return ResponseEntity.ok("Email sent");
+    }
+
+    @GetMapping("sms/{to}")
+    public ResponseEntity<String> sendSms(@PathVariable String to){
+        smsUtil.sendSms(to, "TestCommController");
+        return ResponseEntity.ok("Sms sent");
     }
 }
