@@ -21,16 +21,16 @@ public class NegativeScoreAdjusterValues implements IScoreAdjuster{
 
     @Override
     public Integer getQuestionAuthorAdjustment(Integer actionCode) {
-        return negativeQuestionAuthorAdjustment.get(actionCode-1);
+        return negativeQuestionAuthorAdjustment.get(-1*actionCode-1);
     }
 
     @Override
     public Integer getAnswerAuthorAdjustment(Integer actionCode) {
-        return negativeAnswerAuthorAdjustments.get(actionCode-1);
+        return negativeAnswerAuthorAdjustments.get(-1*actionCode-1);
     }
 
     @Override
     public Integer getSenderAdjustment(Integer actionCode) {
-        return negativeSenderAdjustments.get(actionCode-1);
+        return negativeSenderAdjustments.get(-1*actionCode-1);
     }
 }

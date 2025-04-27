@@ -5,14 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import user.user.entity.ScoreAdjustmentDTO;
 import user.user.entity.User;
-import user.user.repo.UserRepository;
+import user.user.service.UserService;
 
 import java.util.Optional;
 
 @Service
 public class AdjustScoreSubFunctionalityImpl implements ISubscriberFunctionality{
     @Autowired
-    UserRepository userRepo;
+    UserService userService;
 
     @Override
     public void callBackFunctionality(String message) {
@@ -25,7 +25,7 @@ public class AdjustScoreSubFunctionalityImpl implements ISubscriberFunctionality
             return;
         }
 
-        Optional<User> existingSenderOpt = userRepo.findById(scoreAdjustment.getSenderId());
+        Optional<User> existingSenderOpt = userService.findById(scoreAdjustment.getSenderId());
         if(existingSenderOpt.isEmpty()){
             return;
         }
@@ -33,9 +33,9 @@ public class AdjustScoreSubFunctionalityImpl implements ISubscriberFunctionality
         existingSender.setScore(
                 existingSender.getScore() + scoreAdjustment.getSenderAdjustment()
         );
-        userRepo.save(existingSender);
+        userService.save(existingSender);
 
-        Optional<User> existingAuthorOpt = userRepo.findById(scoreAdjustment.getAuthorId());
+        Optional<User> existingAuthorOpt = userService.findById(scoreAdjustment.getAuthorId());
         if(existingAuthorOpt.isEmpty()){
             return;
         }
@@ -43,6 +43,6 @@ public class AdjustScoreSubFunctionalityImpl implements ISubscriberFunctionality
         existingAuthor.setScore(
                 existingAuthor.getScore() + scoreAdjustment.getAuthorAdjustment()
         );
-        userRepo.save(existingAuthor);
+        userService.save(existingAuthor);
     }
 }

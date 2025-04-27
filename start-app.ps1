@@ -19,5 +19,6 @@ foreach ($folder in $folders) {
     }
 }
 
-# Wait for user input before closing
-Read-Host "Press Enter to exit"
+do {
+    $input = Read-Host -Prompt "Press Enter to exit"
+} while ($input -ne "")

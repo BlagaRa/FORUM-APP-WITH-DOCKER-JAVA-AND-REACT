@@ -1,4 +1,4 @@
-package user.user.util;
+package user.user.util.scoreUtil;
 
 public interface IScoreAdjuster {
     Integer getQuestionAuthorAdjustment(Integer actionCode);

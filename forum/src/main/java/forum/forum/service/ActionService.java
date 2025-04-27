@@ -13,6 +13,6 @@ public class ActionService extends AbstractService<Action, ActionRepository> {
     }
 
     public void deleteByPostIdAndUserId(Long postId, Long userId){
-        repo.findByPostIdAndUserId(postId, userId);
+        repo.deleteByPostIdAndUserId(postId, userId);
     }
 }

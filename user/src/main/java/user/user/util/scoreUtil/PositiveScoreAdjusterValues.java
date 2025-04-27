@@ -1,4 +1,4 @@
-package user.user.util;
+package user.user.util.scoreUtil;
 
 import org.springframework.context.annotation.Configuration;
 

@@ -1,4 +1,4 @@
-package user.user.util;
+package user.user.util.scoreUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

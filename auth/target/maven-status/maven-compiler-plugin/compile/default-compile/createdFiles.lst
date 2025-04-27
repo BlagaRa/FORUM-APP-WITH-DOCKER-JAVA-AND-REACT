@@ -1,5 +1,4 @@
 auth\auth\entity\User.class
-auth\auth\repo\UserDAO.class
 auth\auth\entity\FullUserDTO.class
 auth\auth\service\messageQueue\Consumer.class
 auth\auth\service\PasswordService\PasswordHasher.class
@@ -7,6 +6,7 @@ auth\auth\controller\Controller.class
 auth\auth\filters\CorsFilter.class
 auth\auth\service\JWTService\JWTUtil.class
 auth\auth\repo\UserRepository.class
+auth\auth\service\UserService.class
 auth\auth\storage\AwsS3Config.class
 auth\auth\service\JWTService\JWTGenerator.class
 auth\auth\storage\AwsS3Service.class
