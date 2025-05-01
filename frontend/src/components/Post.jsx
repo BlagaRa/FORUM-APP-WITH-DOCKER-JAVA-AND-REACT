@@ -14,7 +14,6 @@ const Post = ({ post }) => (
     <p className="text-gray-300 mb-4">{post.content}</p>
     <div className="flex items-center space-x-6 text-gray-400 text-sm">
       <div>👍 {post.likes} Likes</div>
-      <div>💬 {post.comments.length} Comments</div>
     </div>
   </div>
 );
