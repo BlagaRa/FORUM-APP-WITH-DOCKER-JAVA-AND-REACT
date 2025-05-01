@@ -24,7 +24,6 @@ const SignupPage = ({ setUser }) => {
     e.preventDefault();
     const data = new FormData();
   
-    // Wrap JSON in a Blob to set its content type
     const userBlob = new Blob(
       [JSON.stringify({
         email: formData.email,
