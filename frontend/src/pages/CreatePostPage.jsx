@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const CreatePostPage = () => {
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [text, setContent] = useState('');
   const [photo, setPhoto] = useState(null);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -24,14 +24,15 @@ const CreatePostPage = () => {
         // Make the Post shape. Add all required/default values.
         const postPayload = {
           title,
-          content,
+          text,
           picture: null, // backend will set this once uploaded
           // add other defaults the backend expects for Post (authorId, tags, etc) if needed
         };
         const formData = new FormData();
         formData.append('photo', photo);
-        formData.append('data', new Blob([JSON.stringify(postPayload)], { type: 'application/json' })); // MUST be type application/json!
-
+        var n=JSON.stringify(postPayload);
+        formData.append('data',new Blob([JSON.stringify(postPayload)], { type: 'application/json' })); // MUST be type application/json!
+        console.log(n);
         res = await fetch('http://localhost:8082/posts/ph', {
           method: 'POST',
           body: formData,
@@ -41,7 +42,7 @@ const CreatePostPage = () => {
         // No photo
         const postPayload = {
           title,
-          content,
+          text,
           // add all required fields!
         };
         res = await fetch('http://localhost:8082/posts', {
@@ -86,7 +87,7 @@ const CreatePostPage = () => {
         <label className="block mb-2 text-gray-300">Content</label>
         <textarea
           className="w-full mb-4 p-2 rounded bg-gray-700 text-white"
-          value={content}
+          value={text}
           onChange={e => setContent(e.target.value)}
           rows={6}
           required
