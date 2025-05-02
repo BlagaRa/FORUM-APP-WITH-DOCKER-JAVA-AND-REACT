@@ -18,6 +18,7 @@ const HomePage = () => {
 
       if (res.ok) {
         const data = await res.json();
+        console.log(data)
         setPosts(data);
       } else {
         console.error("Failed to fetch posts");
@@ -69,7 +70,7 @@ const HomePage = () => {
           </div>
         ) : (
           posts.map((p) => (
-            <Post key={p.post.id} post={p.post} onLike={handleLike} />
+            <Post key={p.post.id} post={p} onLike={handleLike} />
           ))
         )}
       </div>
