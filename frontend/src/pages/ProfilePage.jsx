@@ -11,12 +11,13 @@ const ProfilePage = () => {
       setLoading(true);
       try {
         const res = await fetch("http://localhost:8083/users/id", {
-          credentials: "include",
+          credentials: 'include',
         });
         if (res.ok) {
           const userData = await res.json();
+          console.log('Profile user:', userData); // Verify current profile user
           setUser(userData);
-          // requset only user's own posts!
+
           const postsResp = await fetch("http://localhost:8082/posts/filtered", {
             method: "POST",
             credentials: "include",
@@ -25,10 +26,17 @@ const ProfilePage = () => {
           });
           if (postsResp.ok) {
             const postsData = await postsResp.json();
-            // SAFETY: filtrez local dacă e nevoie (doar dacă backend nu filtrează, șterge linia dacă backend e bun!)
-            const justMine = postsData.map((p) => p.post).filter(post => post.author.id === userData.id);
-            setMyPosts(justMine);
+            console.log('Posts received:', postsData);
+            setMyPosts(
+              postsData
+                .map((p) => p.post)
+                .filter((post) => post.author && post.author.id === userData.id)
+            );
+          } else {
+            console.error('Failed to fetch posts');
           }
+        } else {
+          console.error('Failed to fetch user');
         }
       } catch {
         setUser(null);
@@ -48,7 +56,7 @@ const ProfilePage = () => {
       <div className="bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-700 w-full max-w-lg mb-8 mt-6">
         <div className="flex flex-col items-center">
           <img
-            src={user.picture || "/default-avatar.png"}
+            src={user.picture || "./public/default_avatar.jpg"}
             className="w-24 h-24 rounded-full border-2 border-green-400 object-cover mb-4"
             alt="Profile"
           />
@@ -56,7 +64,6 @@ const ProfilePage = () => {
           <div className="text-gray-400">{user.email}</div>
         </div>
       </div>
-      {/* Postările userului */}
       <div className="w-full max-w-2xl mb-8">
         <h2 className="text-xl font-bold text-green-300 mb-5 text-center">My Posts</h2>
         {myPosts.length === 0 ? (

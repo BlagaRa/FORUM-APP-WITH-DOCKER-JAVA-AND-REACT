@@ -26,6 +26,7 @@ const LoginPage = ({ setUser }) => {
         });
         if (userRes.ok) {
           const userData = await userRes.json();
+          console.log('Logged in user:', userData); // Adaugă log pentru verificare
           setUser(userData);
           navigate('/home');
         } else {

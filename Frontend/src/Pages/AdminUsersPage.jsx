@@ -17,7 +17,7 @@ const AdminUsersPage = ({ currentUser }) => {
       } else {
         setError("No permission or failed to fetch users.");
       }
-    } catch{
+    } catch {
       setError("Could not fetch users.");
     } finally {
       setLoading(false);
@@ -34,16 +34,28 @@ const AdminUsersPage = ({ currentUser }) => {
       alert("You cannot ban yourself!");
       return;
     }
+
+    
+    const updatedUsers = users.map((u) =>
+      u.id === user.id ? { ...u, isBanned: !u.isBanned } : u
+    );
+    setUsers(updatedUsers);
+
+   
     setError("");
     const res = await fetch(`http://localhost:8081/ban/${user.id}`, {
       method: "POST",
       credentials: "include",
     });
+
     if (res.ok) {
-      fetchUsers();
+      
+      await fetchUsers();
     } else {
+      
       const text = await res.text();
       setError(text || "Failed to ban/unban user.");
+      await fetchUsers(); 
     }
   };
 

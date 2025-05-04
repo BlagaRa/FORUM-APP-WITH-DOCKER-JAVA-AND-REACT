@@ -23,26 +23,28 @@ const SignupPage = ({ setUser }) => {
   const handleSignup = async (e) => {
     e.preventDefault();
     const data = new FormData();
-  
+
     const userBlob = new Blob(
-      [JSON.stringify({
-        email: formData.email,
-        password: formData.password,
-        name: formData.name,
-        phoneNumber: formData.phoneNumber,
-      })],
+      [
+        JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          name: formData.name,
+          phoneNumber: formData.phoneNumber,
+        }),
+      ],
       { type: 'application/json' }
     );
-  
+
     data.append('data', userBlob);
     data.append('photo', formData.photo);
-  
+
     try {
       const response = await fetch('http://localhost:8081/signup', {
         method: 'POST',
         body: data,
       });
-  
+
       if (response.ok) {
         const message = await response.text();
         alert(message);
@@ -55,7 +57,6 @@ const SignupPage = ({ setUser }) => {
       setError('An error occurred. Please try again.');
     }
   };
-  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const CreatePostPage = () => {
@@ -7,7 +7,30 @@ const CreatePostPage = () => {
   const [photo, setPhoto] = useState(null);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [user, setUser] = useState(null); // Starea pentru utilizator
   const navigate = useNavigate();
+
+  // Verifică utilizatorul curent
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('http://localhost:8083/users/id', {
+          credentials: 'include',
+        });
+        if (res.ok) {
+          const userData = await res.json();
+          setUser(userData);
+        } else {
+          setError('You must be logged in to create a post.');
+          navigate('/login');
+        }
+      } catch {
+        setError('Could not verify user. Please log in again.');
+        navigate('/login');
+      }
+    };
+    fetchUser();
+  }, [navigate]);
 
   const handlePhotoChange = (e) => {
     setPhoto(e.target.files[0]);
@@ -15,36 +38,39 @@ const CreatePostPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!user) {
+      setError('User not authenticated. Please log in.');
+      return;
+    }
+
     setError('');
     setSubmitting(true);
 
     try {
       let res;
       if (photo) {
-        // Make the Post shape. Add all required/default values.
         const postPayload = {
           title,
           text,
-          picture: null, // backend will set this once uploaded
-          // add other defaults the backend expects for Post (authorId, tags, etc) if needed
+          picture: null,
+          authorId: user.id, 
         };
         const formData = new FormData();
         formData.append('photo', photo);
-        var n=JSON.stringify(postPayload);
-        formData.append('data',new Blob([JSON.stringify(postPayload)], { type: 'application/json' })); // MUST be type application/json!
-        console.log(n);
+        formData.append('data', new Blob([JSON.stringify(postPayload)], { type: 'application/json' }));
+        console.log('Payload with photo:', postPayload);
         res = await fetch('http://localhost:8082/posts/ph', {
           method: 'POST',
           body: formData,
           credentials: 'include',
         });
       } else {
-        // No photo
         const postPayload = {
           title,
           text,
-          // add all required fields!
+          authorId: user.id, // Adaugă authorId în payload
         };
+        console.log('Payload without photo:', postPayload);
         res = await fetch('http://localhost:8082/posts', {
           method: 'POST',
           headers: {
@@ -61,12 +87,16 @@ const CreatePostPage = () => {
         const msg = await res.text();
         setError(msg || 'Could not create post.');
       }
-    } catch  {
+    } catch {
       setError('An error occurred. Please try again.');
     } finally {
       setSubmitting(false);
     }
   };
+
+  if (!user) {
+    return <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -80,7 +110,7 @@ const CreatePostPage = () => {
           type="text"
           className="w-full mb-4 p-2 rounded bg-gray-700 text-white"
           value={title}
-          onChange={e => setTitle(e.target.value)}
+          onChange={(e) => setTitle(e.target.value)}
           required
         />
 
@@ -88,7 +118,7 @@ const CreatePostPage = () => {
         <textarea
           className="w-full mb-4 p-2 rounded bg-gray-700 text-white"
           value={text}
-          onChange={e => setContent(e.target.value)}
+          onChange={(e) => setContent(e.target.value)}
           rows={6}
           required
         />

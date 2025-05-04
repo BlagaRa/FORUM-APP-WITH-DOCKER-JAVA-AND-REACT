@@ -1,4 +1,4 @@
-import LoginPage from './Pages/LoginPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
@@ -11,7 +11,6 @@ import AdminUsersPage from './pages/AdminUsersPage.jsx';
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     
     const fetchUser = async () => {
