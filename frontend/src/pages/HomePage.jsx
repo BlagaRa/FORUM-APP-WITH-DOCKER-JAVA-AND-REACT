@@ -11,9 +11,7 @@ const HomePage = () => {
       setError(null);
       const res = await fetch("http://localhost:8082/posts/filtered", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({}),
       });
@@ -42,9 +40,7 @@ const HomePage = () => {
     <div className="min-h-screen bg-gray-900 pt-8 pb-16 px-4 sm:px-0">
       <div className="max-w-2xl mx-auto w-full">
         <h1 className="text-3xl font-bold text-white mb-8 text-center">🖼️ Explore Posts</h1>
-        {error && (
-          <div className="text-red-500 text-center mb-4">{error}</div>
-        )}
+        {error && <div className="text-red-500 text-center mb-4">{error}</div>}
         {loading ? (
           <div className="text-gray-400 text-center">Loading posts...</div>
         ) : posts.length === 0 ? (

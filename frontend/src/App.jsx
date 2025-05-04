@@ -21,6 +21,7 @@ function App() {
         });
         if (res.ok) {
           const userData = await res.json();
+          console.log(userData)
           setUser(userData);
         }
       } catch {

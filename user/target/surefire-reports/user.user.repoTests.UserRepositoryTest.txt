@@ -1,4 +1,28 @@
 -------------------------------------------------------------------------------
 Test set: user.user.repoTests.UserRepositoryTest
 -------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.351 s -- in user.user.repoTests.UserRepositoryTest
+Tests run: 6, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 5.636 s <<< FAILURE! -- in user.user.repoTests.UserRepositoryTest
+user.user.repoTests.UserRepositoryTest.testRetrieveAllUsers -- Time elapsed: 0.082 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Should be 2 users in the database ==> expected: <2> but was: <3>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:563)
+	at user.user.repoTests.UserRepositoryTest.testRetrieveAllUsers(UserRepositoryTest.java:56)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+user.user.repoTests.UserRepositoryTest.testRetrieveAllAfterDeletion -- Time elapsed: 0.006 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Only one user should remain ==> expected: <1> but was: <2>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:563)
+	at user.user.repoTests.UserRepositoryTest.testRetrieveAllAfterDeletion(UserRepositoryTest.java:74)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+

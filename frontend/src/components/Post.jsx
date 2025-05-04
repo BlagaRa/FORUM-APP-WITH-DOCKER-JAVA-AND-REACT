@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Heart, ThumbsDown } from "lucide-react";
-
+import CommentsDropdown from "./CommentsDropdown";
 const Post = ({ post }) => {
   const [isLiked, setIsLiked] = useState(post.likedByCurrentUser ?? false);
   const [isDisliked, setIsDisliked] = useState(post.dislikedByCurrentUser ?? false);
@@ -17,13 +17,12 @@ const Post = ({ post }) => {
     setDislikesCount(post.dislikes || 0);
   }, [post]);
 
+  // Fetch post again for the updated state
   const fetchPost = async (postId) => {
     try {
       const res = await fetch("http://localhost:8082/posts/filtered", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({}),
       });
@@ -47,69 +46,30 @@ const Post = ({ post }) => {
     }
   };
 
-  const handleLike = async (postId, isCurrentlyLiked) => {
-    const url = "http://localhost:8082/actions";
-    const method = isCurrentlyLiked ? "DELETE" : "POST";
-    const userId = "1"; // REPLACE WITH ACTUAL USER ID FROM YOUR DATABASE OR AUTH SYSTEM
+  const updateAction = async (postId, actionType, activate) => {
+    const method = activate ? "POST" : "DELETE";
     const body = JSON.stringify(
-      method === "POST"
-        ? { postId, userId, action: 1 }
-        : { postId, userId }
+      method === "POST" ? { postId, userId: post.id, action: actionType } : { postId, userId: post.id }
     );
+    const url = "http://localhost:8082/actions";
 
     try {
-      console.log(`Sending ${method} to ${url} with body:`, body);
-      const resp = await fetch(url, {
+      const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body,
         credentials: "include",
+        body,
       });
 
-      if (resp.ok) {
-        console.log(`Success: ${method} /actions returned:`, await resp.text());
+      if (res.ok) {
         return await fetchPost(postId);
       } else {
-        const errorText = await resp.text();
-        console.error(`Failed ${method} /actions:`, resp.status, errorText);
-        throw new Error(errorText || "Failed to update like status");
+        const text = await res.text();
+        throw new Error(text || "Failed to update action");
       }
-    } catch (error) {
-      console.error("Error liking post:", error.message);
-      throw error;
-    }
-  };
-
-  const handleDislike = async (postId, isCurrentlyDisliked) => {
-    const url = "http://localhost:8082/actions";
-    const method = isCurrentlyDisliked ? "DELETE" : "POST";
-    const userId = "1"; // REPLACE WITH ACTUAL USER ID FROM YOUR DATABASE OR AUTH SYSTEM
-    const body = JSON.stringify(
-      method === "POST"
-        ? { postId, userId, action: -1 }
-        : { postId, userId }
-    );
-
-    try {
-      console.log(`Sending ${method} to ${url} with body:`, body);
-      const resp = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body,
-        credentials: "include",
-      });
-
-      if (resp.ok) {
-        console.log(`Success: ${method} /actions returned:`, await resp.text());
-        return await fetchPost(postId);
-      } else {
-        const errorText = await resp.text();
-        console.error(`Failed ${method} /actions:`, resp.status, errorText);
-        throw new Error(errorText || "Failed to update dislike status");
-      }
-    } catch (error) {
-      console.error("Error disliking post:", error.message);
-      throw error;
+    } catch (err) {
+      console.error(`Error updating action (${actionType}):`, err);
+      throw err;
     }
   };
 
@@ -117,16 +77,30 @@ const Post = ({ post }) => {
     if (isLiking || isDisliking) return;
     setIsLiking(true);
     setError(null);
+
     try {
-      const result = await handleLike(post.id, isLiked);
-      if (result) {
-        setIsLiked(result.liked);
-        setLikesCount(result.likes);
-        setIsDisliked(result.disliked);
-        setDislikesCount(result.dislikes);
+      if (!isLiked) {
+        if (isDisliked) {
+          await updateAction(post.id, -1, false);
+        }
+        const result = await updateAction(post.id, 1, true);
+        if (result) {
+          setIsLiked(result.liked);
+          setLikesCount(result.likes);
+          setIsDisliked(result.disliked);
+          setDislikesCount(result.dislikes);
+        }
+      } else {
+        const result = await updateAction(post.id, 1, false);
+        if (result) {
+          setIsLiked(result.liked);
+          setLikesCount(result.likes);
+          setIsDisliked(result.disliked);
+          setDislikesCount(result.dislikes);
+        }
       }
     } catch (err) {
-      setError(err.message || "Failed to update like. Please try again.");
+      console.log(err.message || "Failed to update like. Please try again.");
     } finally {
       setIsLiking(false);
     }
@@ -136,16 +110,30 @@ const Post = ({ post }) => {
     if (isLiking || isDisliking) return;
     setIsDisliking(true);
     setError(null);
+
     try {
-      const result = await handleDislike(post.id, isDisliked);
-      if (result) {
-        setIsDisliked(result.disliked);
-        setDislikesCount(result.dislikes);
-        setIsLiked(result.liked);
-        setLikesCount(result.likes);
+      if (!isDisliked) {
+        if (isLiked) {
+          await updateAction(post.id, 1, false);
+        }
+        const result = await updateAction(post.id, -1, true);
+        if (result) {
+          setIsDisliked(result.disliked);
+          setDislikesCount(result.dislikes);
+          setIsLiked(result.liked);
+          setLikesCount(result.likes);
+        }
+      } else {
+        const result = await updateAction(post.id, -1, false);
+        if (!result) {
+          setIsDisliked(result.disliked);
+          setDislikesCount(result.dislikes);
+          setIsLiked(result.liked);
+          setLikesCount(result.likes);
+        }
       }
     } catch (err) {
-      setError(err.message || "Failed to update dislike. Please try again.");
+      console.log(err.message || "Failed to update dislike. Please try again.");
     } finally {
       setIsDisliking(false);
     }
@@ -156,38 +144,26 @@ const Post = ({ post }) => {
       <div className="flex items-center mb-3">
         <img
           src={post.author?.pictures || "/default-avatar.png"}
-          className="w-12 h-12 rounded-full mr-3"
           alt="Author avatar"
+          className="w-12 h-12 rounded-full mr-3"
         />
         <div>
-          <div className="font-bold text-green-400 text-lg">
-            {post.author?.name || "Unknown Author"}
-          </div>
+          <div className="font-bold text-green-400 text-lg">{post.author?.name || "Unknown Author"}</div>
         </div>
       </div>
       <hr className="mb-4 border-gray-600" />
       <h2 className="text-xl font-bold text-white mb-2">{post.title || "Untitled"}</h2>
       {post.picture && (
-        <img
-          src={post.picture}
-          alt="Post"
-          className="w-full max-h-72 object-cover rounded-lg mb-3"
-        />
+        <img src={post.picture} alt="Post" className="w-full max-h-72 object-cover rounded-lg mb-3" />
       )}
       <p className="text-gray-300 mb-4">{post.text || "No content"}</p>
-      {error && (
-        <div className="text-red-500 text-sm mb-2 p-2 bg-red-100 rounded">
-          {error}
-        </div>
-      )}
+      {error && <div className="text-red-500 text-sm mb-2 p-2 bg-red-100 rounded">{error}</div>}
       <div className="flex items-center space-x-4 text-gray-400 text-lg mt-2">
         <button
           onClick={handleLikeClick}
-          className={`transition hover:scale-110 focus:outline-none p-1 rounded-full ${
-            isLiking ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          title={isLiked ? "Unlike this post" : "Like this post"}
+          className={`transition hover:scale-110 focus:outline-none p-1 rounded-full ${isLiking ? "opacity-50 cursor-not-allowed" : ""}`}
           disabled={isLiking}
+          title={isLiked ? "Unlike this post" : "Like this post"}
         >
           <Heart
             fill={isLiked ? "#ef4444" : "none"}
@@ -199,11 +175,9 @@ const Post = ({ post }) => {
         <div className="font-medium">{likesCount} Like{likesCount === 1 ? "" : "s"}</div>
         <button
           onClick={handleDislikeClick}
-          className={`transition hover:scale-110 focus:outline-none p-1 rounded-full ${
-            isDisliking ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          title={isDisliked ? "Undislike this post" : "Dislike this post"}
+          className={`transition hover:scale-110 focus:outline-none p-1 rounded-full ${isDisliking ? "opacity-50 cursor-not-allowed" : ""}`}
           disabled={isDisliking}
+          title={isDisliked ? "Undislike this post" : "Dislike this post"}
         >
           <ThumbsDown
             fill={isDisliked ? "#3b82f6" : "none"}
@@ -214,6 +188,8 @@ const Post = ({ post }) => {
         </button>
         <div className="font-medium">{dislikesCount} Dislike{dislikesCount === 1 ? "" : "s"}</div>
       </div>
+      <CommentsDropdown postId={post.id} />
+      
     </div>
   );
 };
