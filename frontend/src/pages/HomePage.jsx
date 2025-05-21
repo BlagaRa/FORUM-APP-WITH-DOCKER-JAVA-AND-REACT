@@ -48,7 +48,7 @@ const HomePage = () => {
             No posts available
           </div>
         ) : (
-          posts.map((p) => <Post key={p.post.id} post={p.post} />)
+          posts.map((p) => <Post key={p.post.id} post={p} />)
         )}
       </div>
     </div>

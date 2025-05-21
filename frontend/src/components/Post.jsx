@@ -2,19 +2,19 @@ import { useState, useEffect } from "react";
 import { Heart, ThumbsDown } from "lucide-react";
 import CommentsDropdown from "./CommentsDropdown";
 const Post = ({ post }) => {
-  const [isLiked, setIsLiked] = useState(post.likedByCurrentUser ?? false);
-  const [isDisliked, setIsDisliked] = useState(post.dislikedByCurrentUser ?? false);
-  const [likesCount, setLikesCount] = useState(post.likes || 0);
-  const [dislikesCount, setDislikesCount] = useState(post.dislikes || 0);
+  const [isLiked, setIsLiked] = useState((post.action != null && post.action.action > 0) ?? false);
+  const [isDisliked, setIsDisliked] = useState((post.action != null && post.action.action > 0) ?? false);
+  const [likesCount, setLikesCount] = useState(post.post.likes || 0);
+  const [dislikesCount, setDislikesCount] = useState(post.post.dislikes || 0);
   const [isLiking, setIsLiking] = useState(false);
   const [isDisliking, setIsDisliking] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setIsLiked(post.likedByCurrentUser ?? false);
-    setIsDisliked(post.dislikedByCurrentUser ?? false);
-    setLikesCount(post.likes || 0);
-    setDislikesCount(post.dislikes || 0);
+    setIsLiked((post.action != null && post.action.action > 0) ?? false);
+    setIsDisliked((post.action != null && post.action.action < 0)  ?? false);
+    setLikesCount(post.post.likes || 0);
+    setDislikesCount(post.post.dislikes || 0);
   }, [post]);
 
   // Fetch post again for the updated state
@@ -29,13 +29,13 @@ const Post = ({ post }) => {
 
       if (res.ok) {
         const updatedPosts = await res.json();
-        const updatedPost = updatedPosts.find((p) => p.post.id === postId);
+        const updatedPost = updatedPosts.find((p) => p.post.post.id === postId);
         if (updatedPost) {
           return {
-            liked: updatedPost.post.likedByCurrentUser ?? false,
-            likes: updatedPost.post.likes || 0,
-            disliked: updatedPost.post.dislikedByCurrentUser ?? false,
-            dislikes: updatedPost.post.dislikes || 0,
+            liked: updatedpost.post.post.post.likedByCurrentUser ?? false,
+            likes: updatedpost.post.post.post.likes || 0,
+            disliked: updatedpost.post.post.post.dislikedByCurrentUser ?? false,
+            dislikes: updatedpost.post.post.post.dislikes || 0,
           };
         }
       }
@@ -49,7 +49,7 @@ const Post = ({ post }) => {
   const updateAction = async (postId, actionType, activate) => {
     const method = activate ? "POST" : "DELETE";
     const body = JSON.stringify(
-      method === "POST" ? { postId, userId: post.id, action: actionType } : { postId, userId: post.id }
+      method === "POST" ? { postId, userId: post.post.id, action: actionType } : { postId, userId: post.post.id }
     );
     const url = "http://localhost:8082/actions";
 
@@ -81,9 +81,9 @@ const Post = ({ post }) => {
     try {
       if (!isLiked) {
         if (isDisliked) {
-          await updateAction(post.id, -1, false);
+          await updateAction(post.post.id, -1, false);
         }
-        const result = await updateAction(post.id, 1, true);
+        const result = await updateAction(post.post.id, 1, true);
         if (result) {
           setIsLiked(result.liked);
           setLikesCount(result.likes);
@@ -91,7 +91,7 @@ const Post = ({ post }) => {
           setDislikesCount(result.dislikes);
         }
       } else {
-        const result = await updateAction(post.id, 1, false);
+        const result = await updateAction(post.post.id, 1, false);
         if (result) {
           setIsLiked(result.liked);
           setLikesCount(result.likes);
@@ -114,9 +114,9 @@ const Post = ({ post }) => {
     try {
       if (!isDisliked) {
         if (isLiked) {
-          await updateAction(post.id, 1, false);
+          await updateAction(post.post.id, 1, false);
         }
-        const result = await updateAction(post.id, -1, true);
+        const result = await updateAction(post.post.id, -1, true);
         if (result) {
           setIsDisliked(result.disliked);
           setDislikesCount(result.dislikes);
@@ -124,7 +124,7 @@ const Post = ({ post }) => {
           setLikesCount(result.likes);
         }
       } else {
-        const result = await updateAction(post.id, -1, false);
+        const result = await updateAction(post.post.id, -1, false);
         if (!result) {
           setIsDisliked(result.disliked);
           setDislikesCount(result.dislikes);
@@ -143,20 +143,20 @@ const Post = ({ post }) => {
     <div className="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg border border-gray-700 max-w-xl mx-auto">
       <div className="flex items-center mb-3">
         <img
-          src={post.author?.pictures || "/default-avatar.png"}
+          src={post.post.author?.pictures || "/default-avatar.png"}
           alt="Author avatar"
           className="w-12 h-12 rounded-full mr-3"
         />
         <div>
-          <div className="font-bold text-green-400 text-lg">{post.author?.name || "Unknown Author"}</div>
+          <div className="font-bold text-green-400 text-lg">{post.post.author?.name || "Unknown Author"}</div>
         </div>
       </div>
       <hr className="mb-4 border-gray-600" />
-      <h2 className="text-xl font-bold text-white mb-2">{post.title || "Untitled"}</h2>
-      {post.picture && (
-        <img src={post.picture} alt="Post" className="w-full max-h-72 object-cover rounded-lg mb-3" />
+      <h2 className="text-xl font-bold text-white mb-2">{post.post.title || "Untitled"}</h2>
+      {post.post.picture && (
+        <img src={post.post.picture} alt="Post" className="w-full max-h-72 object-cover rounded-lg mb-3" />
       )}
-      <p className="text-gray-300 mb-4">{post.text || "No content"}</p>
+      <p className="text-gray-300 mb-4">{post.post.text || "No content"}</p>
       {error && <div className="text-red-500 text-sm mb-2 p-2 bg-red-100 rounded">{error}</div>}
       <div className="flex items-center space-x-4 text-gray-400 text-lg mt-2">
         <button
@@ -188,7 +188,7 @@ const Post = ({ post }) => {
         </button>
         <div className="font-medium">{dislikesCount} Dislike{dislikesCount === 1 ? "" : "s"}</div>
       </div>
-      <CommentsDropdown postId={post.id} />
+      <CommentsDropdown postId={post.post.id} />
       
     </div>
   );

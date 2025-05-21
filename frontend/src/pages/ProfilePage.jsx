@@ -29,8 +29,7 @@ const ProfilePage = () => {
             console.log('Posts received:', postsData);
             setMyPosts(
               postsData
-                .map((p) => p.post)
-                .filter((post) => post.author && post.author.id === userData.id)
+                .filter((post) => post.post.author && post.post.author.id === userData.id)
             );
           } else {
             console.error('Failed to fetch posts');
@@ -69,7 +68,7 @@ const ProfilePage = () => {
         {myPosts.length === 0 ? (
           <div className="text-gray-400 text-center">No posts yet.</div>
         ) : (
-          myPosts.map((post) => <Post key={post.id} post={post} />)
+          myPosts.map((post) => <Post key={post.post.id} post={post} />)
         )}
       </div>
     </div>

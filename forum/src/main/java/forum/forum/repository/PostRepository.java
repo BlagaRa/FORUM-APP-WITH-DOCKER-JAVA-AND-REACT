@@ -20,7 +20,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "WHERE " +
             "((:answerToId IS NULL AND p.answeredTo IS NULL) OR p.answeredTo = :answerToId) " +
             "AND (:ignoreTags = true OR t IN :tags) " +
-            "AND (:titleQuery IS NULL or :titleQuery = '' OR CAST(fts(p.title, :titleQuery) AS BOOLEAN))"+
+            "AND (:titleQuery IS NULL or :titleQuery = '' OR CAST(fts(p.title, :titleQuery) AS BOOLEAN))"
     )
     List<PostActionDTO> findPostsPersonalized(
             @Param("userId") Long userId,
