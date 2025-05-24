@@ -35,4 +35,6 @@ public class Post {
     private Long answeredTo;
     @ManyToMany(cascade = {CascadeType.MERGE})
     private List<Tag> tags;
+    @OneToMany(mappedBy = "answeredTo")
+    private List<Post> comments;
 }

@@ -13,8 +13,8 @@ public class ScoreUtil {
     @Autowired
     NegativeScoreAdjusterValues negativeScoreAdjusterValues;
 
-    /// todo: maybe change how parameters are passed, maybe through a dto
-        // post parent id is here to tell if it's a question or answer
+    /// todo: maybe change how parameters are passed, maybe through a dto..
+    // post parent id is here to tell if it's a question or answer
     public ScoreAdjustmentDTO getScoreAdjustmentsBasedOnAction(Action action, Long postParentId){
         IScoreAdjuster adjusterMethod =
                 action.getAction() < 0 ? negativeScoreAdjusterValues : positiveScoreAdjusterValues;

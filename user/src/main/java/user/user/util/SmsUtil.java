@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class SmsUtil {
     public static final String ACCOUNT_SID = "_";
     public static final String AUTH_TOKEN = "_";
-    public static final String FROM = "+1 9704382457";
+    public static final String FROM = "+19704382457";
     public static Boolean isTwilioInit= false;
 
     public void sendSms(String to, String content) {
