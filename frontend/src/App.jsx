@@ -74,7 +74,7 @@ function App() {
           <Route path="/profile/:userId?" element={user ? <ProfilePage currentUser={user} /> : <Navigate to="/login" />} />
           <Route path="/tags" element={user ? <TagsPage /> : <Navigate to="/login" />} />
           <Route path="/members" element={user ? <MembersPage /> : <Navigate to="/login" />} />
-        
+
           <Route
             path="/admin/users"
             element={user ? (<AdminUsersPage currentUser={user} />) : (<Navigate to="/home" />)}
