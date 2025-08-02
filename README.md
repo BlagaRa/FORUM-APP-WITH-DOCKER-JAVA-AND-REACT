@@ -1,23 +1,45 @@
 # Forum App
 
-## Descriere
+## Description
 
-Forum App este o aplicație web completă pentru crearea și gestionarea unui forum, construită cu Java (backend), React (frontend), și PostgreSQL (baza de date). Aplicația este containerizată folosind Docker pentru o instalare și rulare ușoară pe orice sistem.
-
----
-
-## Funcționalități principale
-
-- Autentificare și înregistrare utilizatori
-- Creare, editare și ștergere postări și comentarii
-- Pagină de profil utilizator
-- Roluri și permisiuni (admin, utilizator obișnuit)
-- Interfață modernă React cu TailwindCSS
-- Backend robust în Java Spring Boot
-- Persistență date cu PostgreSQL
-- Containerizare cu Docker pentru frontend, backend și baza de date
+Forum App is a full-stack web application for creating and managing forums, built with Java (backend), React (frontend), and PostgreSQL (database). The app is containerized using Docker for easy installation and deployment on any system.
 
 ---
 
-## Structura proiectului
+## Main Features
 
+- User authentication and registration
+- Create, edit, and delete posts and comments
+- User profile page
+- Roles and permissions (admin, regular user)
+- Modern React UI with TailwindCSS
+- Robust Java Spring Boot backend
+- Data persistence with PostgreSQL
+- Docker containerization for frontend, backend, and database
+
+---
+
+## Project Structure
+
+/auth - Java Spring Boot authentication service
+/forum - Java Spring Boot forum service
+/user - Java Spring Boot user management service
+/frontend - React frontend application
+/docker-compose.yml - Docker orchestration for all services
+
+---
+
+## Requirements
+
+- Docker & Docker Compose installed
+- Git
+
+---
+
+## Installation and Running
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/BlagaRa/FORUM-APP-WITH-DOCKER-JAVA-AND-REACT.git
+cd FORUM-APP-WITH-DOCKER-JAVA-AND-REACT
