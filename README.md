@@ -1,188 +1,23 @@
-1. Signup
-Endpoint: POST 8081/signup
+# Forum App
 
-Content-Type: multipart/form-data
+## Descriere
 
-Request Parts:
+Forum App este o aplicație web completă pentru crearea și gestionarea unui forum, construită cu Java (backend), React (frontend), și PostgreSQL (baza de date). Aplicația este containerizată folosind Docker pentru o instalare și rulare ușoară pe orice sistem.
 
-data: JSON (FullUserDTO)
+---
 
-photo: Image file
+## Funcționalități principale
 
-Success Response:
+- Autentificare și înregistrare utilizatori
+- Creare, editare și ștergere postări și comentarii
+- Pagină de profil utilizator
+- Roluri și permisiuni (admin, utilizator obișnuit)
+- Interfață modernă React cu TailwindCSS
+- Backend robust în Java Spring Boot
+- Persistență date cu PostgreSQL
+- Containerizare cu Docker pentru frontend, backend și baza de date
 
-Status: 200 OK
+---
 
-Body: String ("User signed-up successfully")
+## Structura proiectului
 
-Error Responses:
-
-400 Bad Request:
-
-"Invalid credentials" (validation error)
-
-"Email already in use"
-
-Authentication: None
-
-DTO Structure (FullUserDTO):
-
-json
-Copy
-{
-  "email": "string",
-  "password": "string",
-  "name": "string",
-  "phoneNumber": "string"
-}
-2. Login
-Endpoint: POST 8081/login
-
-Content-Type: application/json
-
-Request Body (AuthDTO):
-
-json
-Copy
-{
-  "email": "string",
-  "password": "string"
-}
-Success Response:
-
-Status: 200 OK
-
-Body: JWT token String
-
-Sets Cookie: jwToken=<token>
-
-Error Responses:
-
-400 Bad Request: "Nonexistent user" / "Invalid credentials"
-
-403 Forbidden: "Banned user"
-
-Authentication: None
-
-User Endpoints
-1. Get Current User Identity
-Endpoint: GET 8083/users/id
-
-Response:
-
-json
-Copy
-{
-  "id": "long",
-  "name": "string",
-  "email": "string",
-  "phoneNumber": "string",
-  "picture": "string",
-  "score": "int",
-  "isAdmin": "boolean",
-  "isBanned": "boolean"
-}
-Authentication: Valid JWT required
-
-Permissions: Any authenticated user
-
-2. Get User by ID
-Endpoint: GET 8083/users/{id}
-
-Response:
-
-json
-Copy
-{
-  "id": "long",
-  "name": "string",
-  "email": "string",
-  "phoneNumber": "string",
-  "picture": "string",
-  "score": "int"
-}
-Authentication: Valid JWT required
-
-Permissions: Any authenticated user
-
-3. Update User
-Endpoint: PATCH 8083/users
-
-Content-Type: application/json
-
-Request Body:
-
-json
-Copy
-{
-  "id": "long",
-  "name": "string",
-  "email": "string",
-  "phoneNumber": "string",
-  "picture": "string"
-}
-Response: Updated User object (same structure as GET)
-
-Authentication: Valid JWT required
-
-Permissions: User can only update their own profile
-
-4. Get All Users
-Endpoint: GET 8083/users
-
-Response:
-
-json
-Copy
-[
-  {
-    "id": "long",
-    "name": "string",
-    "email": "string",
-    "isAdmin": "boolean",
-    "isBanned": "boolean",
-    "score": "int"
-  }
-]
-Authentication: Valid JWT required
-
-Permissions: Admin users only
-
-Error: 401 Unauthorized for non-admins
-
-Post Endpoints
-1. Get Filtered Posts
-Endpoint: POST 8082/posts/filtered
-
-Content-Type: application/json
-
-Request Body (FiltersDTO):
-
-json
-Copy
-Response:
-
-json
-Copy
-[
-    {
-        post:{
-            "id": "long",
-            "title": "string",
-            "text": "string",
-            "picture": "string",
-            "dateTime": "timestamp",
-            "likes": "int",
-            "dislikes": "int",
-            "author": {
-            "id": "long",
-            "name": "string"
-            }
-        },
-        action:..
-    }
-
-]
-Authentication: Valid JWT required
-
-Permissions: Any authenticated user
